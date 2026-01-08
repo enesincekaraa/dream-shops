@@ -1,11 +1,13 @@
 package com.enesincekara.dreamshops.model;
 
+import com.enesincekara.dreamshops.exception.product.InsufficientStockException;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -19,6 +21,13 @@ public class Product {
     private BigDecimal price;
     private int inventory;
     private String description;
+
+    @Column(nullable = false, unique = true, updatable = false)
+    private String sku;
+    private boolean active = true;
+    private boolean deleted = false;
+    @Column(nullable = false)
+    private int lowStockThreshold = 5;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id",nullable = false)
@@ -57,33 +66,24 @@ public class Product {
         product.price = price;
         product.inventory = inventory;
         product.description = description;
+        product.sku = UUID.randomUUID().toString();
         product.category = category;
         return product;
     }
 
-
-    public boolean validate() {
-        if (name == null || name.isBlank()) {
-            throw new IllegalArgumentException("name can't be null or empty");
-        }
-        if (brand == null || brand.isBlank()) {
-            throw new IllegalArgumentException("brand can't be null or empty");
-        }
-        if (price == null || price.compareTo(BigDecimal.ZERO) <= 0) {
-            throw new IllegalArgumentException("price can't be negative");
-        }
-        if (inventory < 0) {
-            throw new IllegalArgumentException("inventory can't be negative");
-        }
-        if (description == null || description.isBlank()) {
-            throw new IllegalArgumentException("description can't be null or empty");
-        }
-        if (category == null) {
-            throw new IllegalArgumentException("category can't be null");
-        }
-        return true;
+    public void activate() {
+        this.active = true;
     }
 
+    public void deactivate() {
+        this.active = false;
+    }
+
+
+    public void delete() {
+        this.deleted = true;
+        this.active = false;
+    }
 
 
     public void changeName(String newName) {
@@ -127,15 +127,25 @@ public class Product {
         return inventory > 0;
     }
 
+    public boolean isLowStock() {
+        return inventory <= lowStockThreshold;
+    }
+    public void  increaseStock(int quantity) {
+        if (quantity <= 0) {
+            throw new IllegalArgumentException("quantity must be greater than zero");
+        }
+        this.inventory += quantity;
+    }
     public void decreaseStock(int quantity) {
         if (quantity <= 0) {
-            throw new IllegalArgumentException("quantity can't be negative");
+            throw new IllegalArgumentException("Quantity must be greater than zero");
         }
         if (this.inventory < quantity) {
-            throw  new IllegalArgumentException("inventory can't be smaller than the quantity ");
+            throw new InsufficientStockException("Not enough stock. Current stock: " + inventory);
         }
         this.inventory -= quantity;
     }
+
 
     public void addImage(Image image) {
         images.add(image);
