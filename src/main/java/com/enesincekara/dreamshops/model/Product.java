@@ -20,8 +20,8 @@ public class Product {
     private int inventory;
     private String description;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "category_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id",nullable = false)
     private Category category;
 
     @OneToMany(mappedBy = "product",cascade = CascadeType.ALL, orphanRemoval = true)
@@ -51,7 +51,6 @@ public class Product {
         if (category == null) {
             throw new IllegalArgumentException("category can't be null");
         }
-
         Product product = new Product();
         product.name = name;
         product.brand = brand;
@@ -63,35 +62,68 @@ public class Product {
     }
 
 
+    public boolean validate() {
+        if (name == null || name.isBlank()) {
+            throw new IllegalArgumentException("name can't be null or empty");
+        }
+        if (brand == null || brand.isBlank()) {
+            throw new IllegalArgumentException("brand can't be null or empty");
+        }
+        if (price == null || price.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new IllegalArgumentException("price can't be negative");
+        }
+        if (inventory < 0) {
+            throw new IllegalArgumentException("inventory can't be negative");
+        }
+        if (description == null || description.isBlank()) {
+            throw new IllegalArgumentException("description can't be null or empty");
+        }
+        if (category == null) {
+            throw new IllegalArgumentException("category can't be null");
+        }
+        return true;
+    }
 
-    public void changedName(String newName) {
+
+
+    public void changeName(String newName) {
         if (newName == null || newName.isBlank()) {
             throw new IllegalArgumentException("name can't be null or empty");
         }
         this.name = newName;
     }
 
-    public void changedBrand(String newBrand) {
+    public void changeBrand(String newBrand) {
         if (newBrand == null || newBrand.isBlank()) {
             throw new IllegalArgumentException("brand can't be null or empty");
         }
         this.brand = newBrand;
     }
-    public void changedPrice(BigDecimal newPrice) {
+    public void changeDescription(String newDescription) {
+        this.description = newDescription;
+    }
+    public void changePrice(BigDecimal newPrice) {
         if (newPrice == null || newPrice.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("price can't be negative");
         }
         this.price = newPrice;
     }
 
-    public void changedInventory(int newInventory) {
+    public void changeInventory(int newInventory) {
         if (newInventory < 0) {
             throw new IllegalArgumentException("inventory can't be negative");
         }
         this.inventory = newInventory;
     }
 
-    public boolean isStock() {
+    public void changeCategory(Category category ) {
+        if (category == null) {
+            throw new IllegalArgumentException("category name can't be null");
+        }
+        this.category = category;
+    }
+
+    public boolean isInStock() {
         return inventory > 0;
     }
 
