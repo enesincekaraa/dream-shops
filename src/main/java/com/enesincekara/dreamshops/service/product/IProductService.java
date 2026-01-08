@@ -1,6 +1,6 @@
 package com.enesincekara.dreamshops.service.product;
 
-import com.enesincekara.dreamshops.exception.product.UpdateProductRequest;
+import com.enesincekara.dreamshops.request.UpdateProductRequest;
 import com.enesincekara.dreamshops.model.Product;
 import com.enesincekara.dreamshops.request.AddProductRequest;
 
@@ -18,6 +18,12 @@ public interface IProductService {
     List<Product> getProductsByName(String name);
     List<Product> getProductsByBrandAndName(String brand, String name);
     long countProductsByBrandAndName(String brand, String name);
+    void increaseProductStock(Long productId, int quantity);
+    void decreaseProductStock(Long productId, int quantity);
+    void deactivateProduct(Long productId);
+    void activateProduct(Long productId);
+    void softDeleteProduct(Long productId);
+
 
 
 }

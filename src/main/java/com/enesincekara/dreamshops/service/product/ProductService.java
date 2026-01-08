@@ -2,7 +2,7 @@ package com.enesincekara.dreamshops.service.product;
 
 import com.enesincekara.dreamshops.exception.category.CategoryNotFoundException;
 import com.enesincekara.dreamshops.exception.product.ProductNotFoundException;
-import com.enesincekara.dreamshops.exception.product.UpdateProductRequest;
+import com.enesincekara.dreamshops.request.UpdateProductRequest;
 import com.enesincekara.dreamshops.model.Category;
 import com.enesincekara.dreamshops.model.Product;
 import com.enesincekara.dreamshops.repository.CategoryRepository;
@@ -157,5 +157,54 @@ public class ProductService implements IProductService{
             throw new ProductNotFoundException("No products found");
         }
         return x;
+    }
+
+    @Transactional
+    @Override
+    public void increaseProductStock(Long productId, int quantity) {
+        Product product = productRepository.findById(productId).orElseThrow(
+                ()-> new ProductNotFoundException("Product not found this id: " + productId)
+        );
+        product.increaseStock(quantity);
+        productRepository.save(product);
+    }
+
+    @Override
+    public void decreaseProductStock(Long productId, int quantity) {
+        Product product = productRepository.findById(productId).orElseThrow(
+                ()-> new ProductNotFoundException("Product not found this id: " + productId)
+        );
+        product.decreaseStock(quantity);
+        productRepository.save(product);
+
+    }
+
+    @Override
+    public void deactivateProduct(Long productId) {
+        Product product = productRepository.findById(productId).orElseThrow(
+                ()-> new ProductNotFoundException("Product not found this id: " + productId)
+        );
+        product.deactivate();
+        productRepository.save(product);
+    }
+
+    @Override
+    public void activateProduct(Long productId) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new ProductNotFoundException("Product not found with id: " + productId));
+
+        product.activate();
+        productRepository.save(product);
+
+    }
+
+    @Override
+    public void softDeleteProduct(Long productId) {
+        Product product = productRepository.findById(productId).orElseThrow(
+                ()-> new ProductNotFoundException("Product not found with id: " + productId)
+        );
+        product.delete();
+        productRepository.save(product);
+
     }
 }
