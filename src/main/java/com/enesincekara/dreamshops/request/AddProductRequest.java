@@ -1,6 +1,5 @@
 package com.enesincekara.dreamshops.request;
 
-import com.enesincekara.dreamshops.model.Category;
 
 
 import java.math.BigDecimal;

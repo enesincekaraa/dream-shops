@@ -5,6 +5,7 @@ import com.enesincekara.dreamshops.model.Product;
 import com.enesincekara.dreamshops.request.AddProductRequest;
 import com.enesincekara.dreamshops.response.ProductResponse;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface IProductService {
@@ -24,6 +25,13 @@ public interface IProductService {
     void deactivateProduct(Long productId);
     void activateProduct(Long productId);
     void softDeleteProduct(Long productId);
+    List<ProductResponse> searchProducts(
+            String brand,
+            String category,
+            Boolean active,
+            Boolean inStock,
+            BigDecimal minPrice,
+            BigDecimal maxPrice);
 
 
 

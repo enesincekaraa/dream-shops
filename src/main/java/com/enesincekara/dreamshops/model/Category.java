@@ -18,4 +18,18 @@ public class Category {
     private String name;
     @OneToMany(mappedBy = "category")
     private List<Product> products;
+
+
+    public static Category create(
+            String name
+    ){
+
+        if (name == null || name.isBlank()) {
+            throw new IllegalArgumentException("Name cannot be null or blank");
+        }
+
+        Category category = new Category();
+        category.name = name;
+        return category;
+    }
 }

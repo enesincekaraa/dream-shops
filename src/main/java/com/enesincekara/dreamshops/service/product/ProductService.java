@@ -3,6 +3,7 @@ package com.enesincekara.dreamshops.service.product;
 import com.enesincekara.dreamshops.exception.category.CategoryNotFoundException;
 import com.enesincekara.dreamshops.exception.product.ProductNotFoundException;
 import com.enesincekara.dreamshops.mapper.ProductMapper;
+import com.enesincekara.dreamshops.repository.specification.ProductSpecifications;
 import com.enesincekara.dreamshops.request.UpdateProductRequest;
 import com.enesincekara.dreamshops.model.Category;
 import com.enesincekara.dreamshops.model.Product;
@@ -10,9 +11,11 @@ import com.enesincekara.dreamshops.repository.CategoryRepository;
 import com.enesincekara.dreamshops.repository.ProductRepository;
 import com.enesincekara.dreamshops.request.AddProductRequest;
 import com.enesincekara.dreamshops.response.ProductResponse;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Transactional
@@ -228,6 +231,28 @@ public class ProductService implements IProductService{
         );
         product.delete();
         productRepository.save(product);
+
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ProductResponse> searchProducts(String brand, String category, Boolean active, Boolean inStock, BigDecimal minPrice, BigDecimal maxPrice) {
+        Specification<Product> spec =
+                ProductSpecifications.notDeleted()
+                        .and(ProductSpecifications.hasBrand(brand))
+                        .and(ProductSpecifications.hasCategory(category))
+                        .and(ProductSpecifications.isActive(active))
+                        .and(ProductSpecifications.inStock(inStock))
+                        .and(ProductSpecifications.priceBetween(minPrice, maxPrice));
+
+        List<Product> products = productRepository.findAll(spec);
+
+        if (products.isEmpty()) {
+            throw new ProductNotFoundException("No products found");
+        }
+        return products.stream()
+                .map(ProductMapper::toResponse)
+                .toList();
 
     }
 }
