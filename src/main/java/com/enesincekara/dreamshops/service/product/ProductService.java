@@ -191,6 +191,7 @@ public class ProductService implements IProductService{
         productRepository.save(product);
     }
 
+    @Transactional
     @Override
     public void decreaseProductStock(Long productId, int quantity) {
         Product product = productRepository.findById(productId).orElseThrow(

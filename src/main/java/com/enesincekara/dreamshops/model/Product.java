@@ -147,10 +147,17 @@ public class Product {
     }
 
 
+    private static final int MAX_IMAGES = 5;
+
     public void addImage(Image image) {
+        if (images.size() >= MAX_IMAGES) {
+            throw new IllegalStateException("Maximum " + MAX_IMAGES + " images allowed");
+        }
         images.add(image);
         image.setProduct(this);
     }
+
+
     public void removeImage(Image image) {
         images.remove(image);
         image.setProduct(null);
