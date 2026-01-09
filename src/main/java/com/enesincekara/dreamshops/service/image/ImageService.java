@@ -39,4 +39,13 @@ public class ImageService implements IImageService {
         product.addImage(image);
         imageRepository.save(image);
     }
+
+    @Override
+    public Image downloadImage(Long productId, String fileName) {
+        return imageRepository.findByProductIdAndFileName(productId,fileName)
+                .orElseThrow(
+                        ()-> new RuntimeException("Image not found")
+                );
+
+    }
 }
