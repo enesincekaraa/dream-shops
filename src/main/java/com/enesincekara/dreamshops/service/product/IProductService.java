@@ -3,20 +3,21 @@ package com.enesincekara.dreamshops.service.product;
 import com.enesincekara.dreamshops.request.UpdateProductRequest;
 import com.enesincekara.dreamshops.model.Product;
 import com.enesincekara.dreamshops.request.AddProductRequest;
+import com.enesincekara.dreamshops.response.ProductResponse;
 
 import java.util.List;
 
 public interface IProductService {
     Product addProduct(AddProductRequest req);
-    List<Product> getAllProducts();
-    Product getProductById(Long id);
+    List<ProductResponse> getAllProducts();
+    ProductResponse getProductById(Long id);
     void deleteProduct(Long id);
     void updateProduct(UpdateProductRequest req, Long productId);
-    List<Product> getProductsByCategory(String category);
-    List<Product> getProductsByBrand(String brand);
-    List<Product> getProductsByCategoryAndBrand(String category, String brand);
-    List<Product> getProductsByName(String name);
-    List<Product> getProductsByBrandAndName(String brand, String name);
+    List<ProductResponse> getProductsByCategory(String category);
+    List<ProductResponse> getProductsByBrand(String brand);
+    List<ProductResponse> getProductsByCategoryAndBrand(String category, String brand);
+    List<ProductResponse> getProductsByName(String name);
+    List<ProductResponse> getProductsByBrandAndName(String brand, String name);
     long countProductsByBrandAndName(String brand, String name);
     void increaseProductStock(Long productId, int quantity);
     void decreaseProductStock(Long productId, int quantity);
