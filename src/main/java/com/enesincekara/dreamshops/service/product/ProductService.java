@@ -2,12 +2,14 @@ package com.enesincekara.dreamshops.service.product;
 
 import com.enesincekara.dreamshops.exception.category.CategoryNotFoundException;
 import com.enesincekara.dreamshops.exception.product.ProductNotFoundException;
+import com.enesincekara.dreamshops.mapper.ProductMapper;
 import com.enesincekara.dreamshops.request.UpdateProductRequest;
 import com.enesincekara.dreamshops.model.Category;
 import com.enesincekara.dreamshops.model.Product;
 import com.enesincekara.dreamshops.repository.CategoryRepository;
 import com.enesincekara.dreamshops.repository.ProductRepository;
 import com.enesincekara.dreamshops.request.AddProductRequest;
+import com.enesincekara.dreamshops.response.ProductResponse;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -46,19 +48,20 @@ public class ProductService implements IProductService{
 
     @Transactional(readOnly = true)
     @Override
-    public List<Product> getAllProducts() {
+    public List<ProductResponse> getAllProducts() {
         List<Product> products =  productRepository.findAll();
         if (products.isEmpty()) {
             throw new ProductNotFoundException("No products found");
         }
-        return products;
+        return products.stream().map(ProductMapper::toResponse).toList();
     }
 
     @Transactional(readOnly = true)
     @Override
-    public Product getProductById(Long id) {
-        return productRepository.findById(id).orElseThrow(
+    public ProductResponse getProductById(Long id) {
+        Product product = productRepository.findById(id).orElseThrow(
                 ()-> new ProductNotFoundException("Product not found this id: " + id));
+         return ProductMapper.toResponse(product);
     }
 
     @Transactional
@@ -105,48 +108,67 @@ public class ProductService implements IProductService{
 
     @Transactional(readOnly = true)
     @Override
-    public List<Product> getProductsByCategory(String category) {
-        return productRepository.findByCategory_Name(category);
+    public List<ProductResponse> getProductsByCategory(String category) {
+        List<Product>  products = productRepository.findByCategory_Name(category);
+        if (products.isEmpty()) {
+            throw new ProductNotFoundException("No products found");
+        }
+        return products
+                .stream()
+                .map(ProductMapper::toResponse)
+                .toList();
     }
 
     @Transactional(readOnly = true)
     @Override
-    public List<Product> getProductsByBrand(String brand) {
+    public List<ProductResponse> getProductsByBrand(String brand) {
         List<Product> products = productRepository.findByBrand(brand);
         if (products.isEmpty()) {
             throw new ProductNotFoundException("No products found");
         }
-        return products;
+        return products
+                .stream()
+                .map(ProductMapper::toResponse)
+                .toList();
     }
 
     @Transactional(readOnly = true)
     @Override
-    public List<Product> getProductsByCategoryAndBrand(String category, String brand) {
+    public List<ProductResponse> getProductsByCategoryAndBrand(String category, String brand) {
         List<Product> products = productRepository.findByCategory_NameAndBrand(category, brand);
         if (products.isEmpty()) {
             throw new ProductNotFoundException("No products found");
         }
-        return products;
+        return products
+                .stream()
+                .map(ProductMapper::toResponse)
+                .toList();
     }
 
     @Transactional(readOnly = true)
     @Override
-    public List<Product> getProductsByName(String name) {
+    public List<ProductResponse> getProductsByName(String name) {
         List<Product> products =  productRepository.findByName(name);
         if (products.isEmpty()) {
             throw new ProductNotFoundException("No products found");
         }
-        return products;
+        return products
+                .stream()
+                .map(ProductMapper::toResponse)
+                .toList();
     }
 
     @Transactional(readOnly = true)
     @Override
-    public List<Product> getProductsByBrandAndName(String brand, String name) {
+    public List<ProductResponse> getProductsByBrandAndName(String brand, String name) {
         List<Product> products = productRepository.findByBrandAndName(brand,name);
         if (products.isEmpty()) {
             throw new ProductNotFoundException("No products found");
         }
-        return products;
+        return products
+                .stream()
+                .map(ProductMapper::toResponse)
+                .toList();
     }
 
     @Transactional(readOnly = true)
