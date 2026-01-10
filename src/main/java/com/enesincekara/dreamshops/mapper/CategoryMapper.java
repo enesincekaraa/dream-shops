@@ -1,7 +1,7 @@
 package com.enesincekara.dreamshops.mapper;
 
 import com.enesincekara.dreamshops.model.Category;
-import com.enesincekara.dreamshops.response.CategoryResponse;
+import com.enesincekara.dreamshops.response.categories.CategoryResponse;
 
 public class CategoryMapper {
 

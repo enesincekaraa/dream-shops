@@ -1,10 +1,10 @@
-package com.enesincekara.dreamshops.exception;
+package com.enesincekara.dreamshops.exception.base;
 
 
 import com.enesincekara.dreamshops.exception.category.CategoryNotFoundException;
 import com.enesincekara.dreamshops.exception.product.ProductNotFoundException;
-import com.enesincekara.dreamshops.response.ErrorResponse;
-import com.enesincekara.dreamshops.response.ValidationErrorResponse;
+import com.enesincekara.dreamshops.response.errors.ErrorResponse;
+import com.enesincekara.dreamshops.response.errors.ValidationErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;

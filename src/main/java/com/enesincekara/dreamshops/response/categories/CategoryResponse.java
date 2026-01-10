@@ -1,4 +1,4 @@
-package com.enesincekara.dreamshops.response;
+package com.enesincekara.dreamshops.response.categories;
 
 import com.enesincekara.dreamshops.model.Product;
 

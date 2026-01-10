@@ -10,7 +10,10 @@ import com.enesincekara.dreamshops.model.Product;
 import com.enesincekara.dreamshops.repository.CategoryRepository;
 import com.enesincekara.dreamshops.repository.ProductRepository;
 import com.enesincekara.dreamshops.request.AddProductRequest;
-import com.enesincekara.dreamshops.response.ProductResponse;
+import com.enesincekara.dreamshops.response.products.PageResponse;
+import com.enesincekara.dreamshops.response.products.ProductResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,15 +52,6 @@ public class ProductService implements IProductService{
         return productRepository.save(product);
     }
 
-    @Transactional(readOnly = true)
-    @Override
-    public List<ProductResponse> getAllProducts() {
-        List<Product> products =  productRepository.findAll();
-        if (products.isEmpty()) {
-            throw new ProductNotFoundException("No products found");
-        }
-        return products.stream().map(ProductMapper::toResponse).toList();
-    }
 
     @Transactional(readOnly = true)
     @Override
@@ -234,25 +228,64 @@ public class ProductService implements IProductService{
 
     }
 
+
+
     @Override
     @Transactional(readOnly = true)
-    public List<ProductResponse> searchProducts(String brand, String category, Boolean active, Boolean inStock, BigDecimal minPrice, BigDecimal maxPrice) {
+    public PageResponse<ProductResponse> getAllProducts(Pageable pageable) {
+        Page<Product> page = productRepository.findAll(
+                ProductSpecifications.notDeleted(),
+                pageable
+        );
+        if (page.isEmpty()) {
+            throw new ProductNotFoundException("No products found");
+        }
+
+        List<ProductResponse> content=
+                page
+                        .getContent()
+                        .stream()
+                        .map(ProductMapper::toResponse)
+                        .toList();
+
+        return new PageResponse<>(
+                content,
+                page.getNumber(),
+                page.getSize(),
+                page.getTotalElements(),
+                page.getTotalPages(),
+                page.isLast()
+        );
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public PageResponse<ProductResponse> searchProducts(String brand, String category, Boolean active, Boolean inStock, BigDecimal minPrice, BigDecimal maxPrice, Pageable pageable) {
         Specification<Product> spec =
-                ProductSpecifications.notDeleted()
+                ProductSpecifications
+                        .notDeleted()
                         .and(ProductSpecifications.hasBrand(brand))
                         .and(ProductSpecifications.hasCategory(category))
                         .and(ProductSpecifications.isActive(active))
                         .and(ProductSpecifications.inStock(inStock))
                         .and(ProductSpecifications.priceBetween(minPrice, maxPrice));
 
-        List<Product> products = productRepository.findAll(spec);
-
-        if (products.isEmpty()) {
-            throw new ProductNotFoundException("No products found");
+        Page<Product> page = productRepository.findAll(spec, pageable);
+        if (page.isEmpty()) {
+            throw new ProductNotFoundException("No products found for given filters");
         }
-        return products.stream()
+        List<ProductResponse> content = page.getContent()
+                .stream()
                 .map(ProductMapper::toResponse)
                 .toList();
 
+        return new PageResponse<>(
+                content,
+                page.getNumber(),
+                page.getSize(),
+                page.getTotalElements(),
+                page.getTotalPages(),
+                page.isLast()
+        );
     }
 }

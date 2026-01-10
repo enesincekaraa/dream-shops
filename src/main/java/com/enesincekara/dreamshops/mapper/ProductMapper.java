@@ -2,7 +2,7 @@ package com.enesincekara.dreamshops.mapper;
 
 import com.enesincekara.dreamshops.model.Image;
 import com.enesincekara.dreamshops.model.Product;
-import com.enesincekara.dreamshops.response.ProductResponse;
+import com.enesincekara.dreamshops.response.products.ProductResponse;
 
 import java.util.stream.Collectors;
 

@@ -1,15 +1,18 @@
-package com.enesincekara.dreamshops.controller;
+package com.enesincekara.dreamshops.controller.products;
 
 import com.enesincekara.dreamshops.mapper.ProductMapper;
 import com.enesincekara.dreamshops.model.Product;
 import com.enesincekara.dreamshops.request.AddProductRequest;
 import com.enesincekara.dreamshops.request.StockUpdateRequest;
-import com.enesincekara.dreamshops.response.ProductResponse;
+import com.enesincekara.dreamshops.response.products.PageResponse;
+import com.enesincekara.dreamshops.response.products.ProductResponse;
 import com.enesincekara.dreamshops.service.product.IProductService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
-import java.util.List;
+
 @RestController
 @RequestMapping("/api/products")
 public class ProductController {
@@ -29,8 +32,10 @@ public class ProductController {
     }
 
     @GetMapping
-    public List<ProductResponse> getProducts() {
-        return productService.getAllProducts();
+    public PageResponse<ProductResponse> getProducts(
+            @PageableDefault(page = 0, size = 10,sort = "name") Pageable pageable
+    ) {
+        return productService.getAllProducts(pageable);
     }
     @GetMapping("/{id}")
     public ProductResponse getProductById(@PathVariable("id") Long id) {
@@ -38,15 +43,17 @@ public class ProductController {
     }
 
     @GetMapping("/search")
-    public List<ProductResponse> searchProducts(
+    public PageResponse<ProductResponse> searchProducts(
             @RequestParam(required = false) String brand,
             @RequestParam(required = false) String category,
             @RequestParam(required = false) Boolean active,
             @RequestParam(required = false) Boolean inStock,
             @RequestParam(required = false) BigDecimal minPrice,
-            @RequestParam(required = false) BigDecimal maxPrice
+            @RequestParam(required = false) BigDecimal maxPrice,
+            @PageableDefault(page = 0, size = 10,sort = "price") Pageable pageable
+
     ) {
-        return productService.searchProducts(brand, category, active, inStock, minPrice, maxPrice);
+        return productService.searchProducts(brand, category, active, inStock, minPrice, maxPrice,pageable);
     }
 
     @PatchMapping("/{id}/stock/increase")

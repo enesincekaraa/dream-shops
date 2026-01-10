@@ -1,4 +1,4 @@
-package com.enesincekara.dreamshops.response;
+package com.enesincekara.dreamshops.response.errors;
 
 import java.time.LocalDateTime;
 
