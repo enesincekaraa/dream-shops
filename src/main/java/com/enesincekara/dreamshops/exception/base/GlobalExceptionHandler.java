@@ -1,6 +1,7 @@
 package com.enesincekara.dreamshops.exception.base;
 
-
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
+import jakarta.persistence.OptimisticLockException;
 import com.enesincekara.dreamshops.exception.category.CategoryNotFoundException;
 import com.enesincekara.dreamshops.exception.product.ProductNotFoundException;
 import com.enesincekara.dreamshops.response.errors.ErrorResponse;
@@ -74,6 +75,20 @@ public class GlobalExceptionHandler {
         return new ErrorResponse(
                 e.getMessage(),
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                LocalDateTime.now()
+        );
+    }
+
+
+    @ExceptionHandler({
+            OptimisticLockException.class,
+            ObjectOptimisticLockingFailureException.class
+    })
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ErrorResponse handleOptimisticLock(Exception ex) {
+        return new ErrorResponse(
+                "The product was updated by another transaction. Please retry.",
+                HttpStatus.CONFLICT.value(),
                 LocalDateTime.now()
         );
     }
