@@ -6,6 +6,7 @@ import com.enesincekara.dreamshops.request.AddProductRequest;
 import com.enesincekara.dreamshops.request.StockUpdateRequest;
 import com.enesincekara.dreamshops.response.ProductResponse;
 import com.enesincekara.dreamshops.service.product.IProductService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 import java.util.List;
@@ -21,7 +22,7 @@ public class ProductController {
 
     @PostMapping
     public ProductResponse createProduct(
-            @RequestBody AddProductRequest req
+           @Valid @RequestBody AddProductRequest req
             ){
         Product product = productService.addProduct(req);
         return ProductMapper.toResponse(product);
@@ -50,14 +51,16 @@ public class ProductController {
 
     @PatchMapping("/{id}/stock/increase")
     public void increaseStock(
+            @Valid
             @PathVariable Long id,
-            @RequestBody StockUpdateRequest req
+           @RequestBody StockUpdateRequest req
     ){
         productService.increaseProductStock(id, req.quantity());
     }
 
     @PatchMapping("/{id}/stock/decrease")
     public void decreaseStock(
+            @Valid
             @PathVariable Long id,
             @RequestBody StockUpdateRequest req
             ){
