@@ -1,7 +1,6 @@
-package com.enesincekara.dreamshops.response;
+package com.enesincekara.dreamshops.response.errors;
 
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Map;
 

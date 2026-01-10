@@ -1,10 +1,10 @@
-package com.enesincekara.dreamshops.controller;
+package com.enesincekara.dreamshops.controller.categories;
 
 
 import com.enesincekara.dreamshops.mapper.CategoryMapper;
 import com.enesincekara.dreamshops.model.Category;
 import com.enesincekara.dreamshops.request.AddCategoryRequest;
-import com.enesincekara.dreamshops.response.CategoryResponse;
+import com.enesincekara.dreamshops.response.categories.CategoryResponse;
 import com.enesincekara.dreamshops.service.category.ICategoryService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

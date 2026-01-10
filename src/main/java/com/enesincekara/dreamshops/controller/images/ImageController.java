@@ -1,4 +1,4 @@
-package com.enesincekara.dreamshops.controller;
+package com.enesincekara.dreamshops.controller.images;
 
 
 import com.enesincekara.dreamshops.model.Image;

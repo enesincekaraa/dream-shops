@@ -3,14 +3,15 @@ package com.enesincekara.dreamshops.service.product;
 import com.enesincekara.dreamshops.request.UpdateProductRequest;
 import com.enesincekara.dreamshops.model.Product;
 import com.enesincekara.dreamshops.request.AddProductRequest;
-import com.enesincekara.dreamshops.response.ProductResponse;
+import com.enesincekara.dreamshops.response.products.PageResponse;
+import com.enesincekara.dreamshops.response.products.ProductResponse;
+import org.springframework.data.domain.Pageable;
 
 import java.math.BigDecimal;
 import java.util.List;
 
 public interface IProductService {
     Product addProduct(AddProductRequest req);
-    List<ProductResponse> getAllProducts();
     ProductResponse getProductById(Long id);
     void deleteProduct(Long id);
     void updateProduct(UpdateProductRequest req, Long productId);
@@ -25,14 +26,15 @@ public interface IProductService {
     void deactivateProduct(Long productId);
     void activateProduct(Long productId);
     void softDeleteProduct(Long productId);
-    List<ProductResponse> searchProducts(
+    PageResponse<ProductResponse> getAllProducts(Pageable pageable);
+    PageResponse<ProductResponse> searchProducts(
             String brand,
             String category,
             Boolean active,
             Boolean inStock,
             BigDecimal minPrice,
-            BigDecimal maxPrice);
-
-
+            BigDecimal maxPrice,
+            Pageable pageable
+    );
 
 }

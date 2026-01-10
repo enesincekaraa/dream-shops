@@ -1,4 +1,4 @@
-package com.enesincekara.dreamshops.response;
+package com.enesincekara.dreamshops.response.products;
 
 import java.math.BigDecimal;
 import java.util.List;
