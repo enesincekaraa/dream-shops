@@ -160,13 +160,14 @@ public class Product {
             throw new IllegalStateException("Maximum " + MAX_IMAGES + " images allowed");
         }
         images.add(image);
-        image.setProduct(this);
+        image.assignProduct(this);
     }
+
 
 
     public void removeImage(Image image) {
         images.remove(image);
-        image.setProduct(null);
+        image.assignProduct(null);
     }
 
 

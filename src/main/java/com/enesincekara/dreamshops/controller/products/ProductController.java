@@ -10,6 +10,7 @@ import com.enesincekara.dreamshops.service.product.IProductService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 
@@ -24,6 +25,7 @@ public class ProductController {
 
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public ProductResponse createProduct(
            @Valid @RequestBody AddProductRequest req
             ){
