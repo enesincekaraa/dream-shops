@@ -1,18 +1,13 @@
 package com.enesincekara.dreamshops.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.sql.Blob;
 
 @Entity
 @Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Image {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,10 +15,35 @@ public class Image {
     private String fileName;
     private String fileType;
 
-    private byte[] image;
-    private String downloadUrl;
+    @Column(nullable = false)
+    private String url;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id")
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id", nullable = false)
     private Product product;
+
+
+    private Image(
+            String fileName,
+            String fileType,
+            String url
+    ){
+        this.fileName = fileName;
+        this.fileType = fileType;
+        this.url = url;
+    }
+
+    public static Image create(String fileName, String fileType, String url){
+        if(fileName == null || fileName.isBlank()){
+            throw new IllegalArgumentException("Invalid file name");
+        }
+        if(url == null || url.isBlank()){
+            throw new IllegalArgumentException("Invalid file type");
+        }
+        return new Image(fileName, fileType, url);
+    }
+    void assignProduct(Product product){
+        this.product = product;
+    }
 }
