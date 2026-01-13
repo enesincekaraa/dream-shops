@@ -12,38 +12,51 @@ public class Image {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String fileName;
-    private String fileType;
+
+    // Kullanıcıya görünen orijinal isim
+    @Column(nullable = false)
+    private String originalFileName;
 
     @Column(nullable = false)
-    private String url;
+    private String contentType;
 
+    // MinIO object name (uuid + originalName)
+    @Column(nullable = false, unique = true, updatable = false)
+    private String objectKey;
+
+    // API'den indirilecek url
+    @Column(nullable = false)
+    private String downloadUrl;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
 
-    private Image(
-            String fileName,
-            String fileType,
-            String url
-    ){
-        this.fileName = fileName;
-        this.fileType = fileType;
-        this.url = url;
+    public static Image create(String originalFileName, String contentType, String objectKey, String downloadUrl) {
+        if (originalFileName == null || originalFileName.isBlank()) {
+            throw new IllegalArgumentException("originalFileName can't be null or blank");
+        }
+        if (contentType == null || contentType.isBlank()) {
+            throw new IllegalArgumentException("contentType can't be null or blank");
+        }
+        if (objectKey == null || objectKey.isBlank()) {
+            throw new IllegalArgumentException("objectKey can't be null or blank");
+        }
+        if (downloadUrl == null || downloadUrl.isBlank()) {
+            throw new IllegalArgumentException("downloadUrl can't be null or blank");
+        }
+
+        Image image = new Image();
+        image.originalFileName = originalFileName;
+        image.contentType = contentType;
+        image.objectKey = objectKey;
+        image.downloadUrl = downloadUrl;
+        return image;
     }
 
-    public static Image create(String fileName, String fileType, String url){
-        if(fileName == null || fileName.isBlank()){
-            throw new IllegalArgumentException("Invalid file name");
-        }
-        if(url == null || url.isBlank()){
-            throw new IllegalArgumentException("Invalid file type");
-        }
-        return new Image(fileName, fileType, url);
-    }
-    void assignProduct(Product product){
+    // ilişki yönetimi için package-private bırakabilirsin
+    void setProduct(Product product) {
         this.product = product;
     }
 }

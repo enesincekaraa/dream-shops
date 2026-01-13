@@ -1,8 +1,10 @@
 package com.enesincekara.dreamshops.controller.images;
 
-
+import com.enesincekara.dreamshops.mapper.ImageMapper;
 import com.enesincekara.dreamshops.model.Image;
+import com.enesincekara.dreamshops.response.image.ImageResponse;
 import com.enesincekara.dreamshops.service.image.ImageService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -12,29 +14,42 @@ import java.io.IOException;
 @RestController
 @RequestMapping("/api/products/{productId}/images")
 public class ImageController {
+
     private final ImageService imageService;
 
     public ImageController(ImageService imageService) {
         this.imageService = imageService;
     }
 
+    // Upload
     @PostMapping(consumes = "multipart/form-data")
-    public void uploadImage(
+    @ResponseStatus(HttpStatus.CREATED)
+    public ImageResponse uploadImage(
             @PathVariable Long productId,
-            @RequestParam("file") MultipartFile file) throws IOException {
-        imageService.uploadImage(productId, file);
+            @RequestParam("file") MultipartFile file
+    ) throws IOException {
+        return imageService.uploadImage(productId, file);
     }
 
-    @GetMapping("/{fileName}")
+    @GetMapping("/{objectKey}")
     public ResponseEntity<byte[]> downloadImage(
             @PathVariable Long productId,
-            @PathVariable String fileName
-    ){
-        Image image = imageService.downloadImage(productId, fileName);
+            @PathVariable String objectKey
+    ) {
+        var downloaded = imageService.downloadImage(productId, objectKey);
 
-        return  ResponseEntity.ok()
-                .header("Content-Type",image.getFileType())
-                .body(image.getImage());
+        return ResponseEntity.ok()
+                .header("Content-Type", downloaded.contentType())
+                .body(downloaded.bytes());
     }
 
+    // Delete
+    @DeleteMapping("/{objectKey}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteImage(
+            @PathVariable Long productId,
+            @PathVariable String objectKey
+    ) {
+        imageService.deleteImage(productId, objectKey);
+    }
 }
