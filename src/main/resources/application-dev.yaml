@@ -13,6 +13,9 @@ spring:
       hibernate:
         format_sql: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
+  security:
+    jwt:
+      secret: ${SECURITY_JWT_SECRET}
 
 minio:
   endpoint: ${MINIO_ENDPOINT:http://localhost:9000}
