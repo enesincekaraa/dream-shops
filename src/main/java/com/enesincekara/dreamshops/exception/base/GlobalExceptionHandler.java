@@ -1,5 +1,6 @@
 package com.enesincekara.dreamshops.exception.base;
 
+import com.enesincekara.dreamshops.exception.image.ImageStorageException;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import jakarta.persistence.OptimisticLockException;
 import com.enesincekara.dreamshops.exception.category.CategoryNotFoundException;
@@ -89,6 +90,17 @@ public class GlobalExceptionHandler {
         return new ErrorResponse(
                 "The product was updated by another transaction. Please retry.",
                 HttpStatus.CONFLICT.value(),
+                LocalDateTime.now()
+        );
+    }
+
+
+    @ExceptionHandler(ImageStorageException.class)
+    @ResponseStatus(HttpStatus.BAD_GATEWAY)
+    public ErrorResponse handleImageStorage(ImageStorageException e) {
+        return new ErrorResponse(
+                e.getMessage(),
+                HttpStatus.BAD_GATEWAY.value(),
                 LocalDateTime.now()
         );
     }
