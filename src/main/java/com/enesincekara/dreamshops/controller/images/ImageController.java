@@ -43,13 +43,13 @@ public class ImageController {
                 .body(downloaded.bytes());
     }
 
-    // Delete
-    @DeleteMapping("/{objectKey}")
+    @DeleteMapping("/{imageId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteImage(
             @PathVariable Long productId,
-            @PathVariable String objectKey
-    ) {
-        imageService.deleteImage(productId, objectKey);
+            @PathVariable Long imageId
+    ){
+        imageService.deleteImage(productId,imageId);
     }
+
 }

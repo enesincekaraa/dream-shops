@@ -1,5 +1,6 @@
 package com.enesincekara.dreamshops.exception.base;
 
+import com.enesincekara.dreamshops.exception.image.ImageNotFoundException;
 import com.enesincekara.dreamshops.exception.image.ImageStorageException;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import jakarta.persistence.OptimisticLockException;
@@ -34,6 +35,16 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(CategoryNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleCategoryNotFound(CategoryNotFoundException e) {
+        return new ErrorResponse(
+                e.getMessage(),
+                HttpStatus.NOT_FOUND.value(),
+                LocalDateTime.now()
+        );
+    }
+
+    @ExceptionHandler(ImageNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse handleImageNotFound(ImageNotFoundException e) {
         return new ErrorResponse(
                 e.getMessage(),
                 HttpStatus.NOT_FOUND.value(),

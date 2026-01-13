@@ -1,5 +1,6 @@
 package com.enesincekara.dreamshops.service.image;
 
+import com.enesincekara.dreamshops.exception.image.ImageNotFoundException;
 import com.enesincekara.dreamshops.exception.product.ProductNotFoundException;
 import com.enesincekara.dreamshops.mapper.ImageMapper;
 import com.enesincekara.dreamshops.model.Image;
@@ -33,10 +34,8 @@ public class ImageService {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new ProductNotFoundException("Product not found with id " + productId));
 
-        // 1) binary -> MinIO
         String objectKey = storage.upload(file);
 
-        // 2) metadata -> DB
         String downloadUrl = "/api/products/" + productId + "/images/" + objectKey;
 
         Image image = Image.create(
@@ -47,7 +46,6 @@ public class ImageService {
         );
 
         product.addImage(image);
-        // cascade ALL varsa product save yeter, ama net olsun:
         Image savedImage =  imageRepository.save(image);
 
         return ImageMapper.toResponse(savedImage);
@@ -63,19 +61,22 @@ public class ImageService {
         return new DownloadedImage(image.getContentType(), bytes);
     }
 
-    public void deleteImage(Long productId, String objectKey) {
-        Image image = imageRepository.findByProductIdAndObjectKey(productId, objectKey)
-                .orElseThrow(() -> new RuntimeException("Image not found"));
 
-        // Clean yaklaşım: önce MinIO, sonra DB
-        storage.delete(objectKey);
 
-        // ilişkiyi kopar
-        Product product = image.getProduct();
-        product.removeImage(image);
+    @Transactional()
+    public  void deleteImage(Long productId, Long imageId) {
+        Image image = imageRepository.findById(imageId).orElseThrow(
+                ()-> new ImageNotFoundException("Image not found with id " + imageId)
+        );
 
-        // orphanRemoval varsa bu satır opsiyonel ama açık yazalım
+        if(!image.getProduct().getId().equals(productId)) {
+            throw new IllegalArgumentException("Image does not belong to this product");
+        }
+
+        storage.delete(image.getObjectKey());
+
         imageRepository.delete(image);
+
     }
 
     public record DownloadedImage(String contentType, byte[] bytes) {}
