@@ -44,17 +44,21 @@ public class ProductController {
         return ResponseEntity.noContent().build();
     }
 
+    @PreAuthorize("hasRole('USER')")
     @GetMapping
     public PageResponse<ProductResponse> getProducts(
             @PageableDefault(page = 0, size = 10,sort = "name") Pageable pageable
     ) {
         return productService.getAllProducts(pageable);
     }
+
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/{id}")
     public ProductResponse getProductById(@PathVariable("id") Long id) {
         return productService.getProductById(id);
     }
 
+    @PreAuthorize("hasRole('USER')")
     @GetMapping("/search")
     public PageResponse<ProductResponse> searchProducts(
             @RequestParam(required = false) String brand,

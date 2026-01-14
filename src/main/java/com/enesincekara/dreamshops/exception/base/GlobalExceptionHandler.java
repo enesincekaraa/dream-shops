@@ -1,5 +1,6 @@
 package com.enesincekara.dreamshops.exception.base;
 
+import com.enesincekara.dreamshops.exception.PasswordNotMatchedException;
 import com.enesincekara.dreamshops.exception.image.ImageNotFoundException;
 import com.enesincekara.dreamshops.exception.image.ImageStorageException;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
@@ -9,6 +10,7 @@ import com.enesincekara.dreamshops.exception.product.ProductNotFoundException;
 import com.enesincekara.dreamshops.response.errors.ErrorResponse;
 import com.enesincekara.dreamshops.response.errors.ValidationErrorResponse;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -115,6 +117,26 @@ public class GlobalExceptionHandler {
         return new ErrorResponse(
                 e.getMessage(),
                 HttpStatus.BAD_GATEWAY.value(),
+                LocalDateTime.now()
+        );
+    }
+
+    @ExceptionHandler(PasswordNotMatchedException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handlePasswordNotMatched(PasswordNotMatchedException e) {
+        return new ErrorResponse(
+                e.getMessage(),
+                HttpStatus.BAD_REQUEST.value(),
+                LocalDateTime.now()
+        );
+    }
+
+    @ExceptionHandler(UsernameNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse handleUsernameNotFound(UsernameNotFoundException e) {
+        return new ErrorResponse(
+                e.getMessage(),
+                HttpStatus.NOT_FOUND.value(),
                 LocalDateTime.now()
         );
     }

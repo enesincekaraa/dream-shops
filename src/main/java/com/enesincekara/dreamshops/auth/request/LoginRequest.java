@@ -1,4 +1,4 @@
-package com.enesincekara.dreamshops.auth;
+package com.enesincekara.dreamshops.auth.request;
 
 public record LoginRequest(
         String username,
