@@ -15,8 +15,12 @@ import com.enesincekara.dreamshops.response.products.ProductResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -51,7 +55,6 @@ public class ProductService implements IProductService{
         );
         return productRepository.save(product);
     }
-
 
     @Transactional(readOnly = true)
     @Override

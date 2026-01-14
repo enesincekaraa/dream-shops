@@ -6,6 +6,7 @@ import com.enesincekara.dreamshops.response.image.ImageResponse;
 import com.enesincekara.dreamshops.service.image.ImageService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,6 +23,7 @@ public class ImageController {
     }
 
     // Upload
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(consumes = "multipart/form-data")
     @ResponseStatus(HttpStatus.CREATED)
     public ImageResponse uploadImage(
@@ -43,6 +45,7 @@ public class ImageController {
                 .body(downloaded.bytes());
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{imageId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteImage(
