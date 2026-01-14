@@ -11,6 +11,9 @@ import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 
@@ -24,6 +27,7 @@ public class ProductController {
     }
 
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ProductResponse createProduct(
@@ -31,6 +35,13 @@ public class ProductController {
             ){
         Product product = productService.addProduct(req);
         return ProductMapper.toResponse(product);
+    }
+    @PreAuthorize("hasRole('ADMIN')")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @RequestMapping("/{id}/delete")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        productService.deleteProduct(id);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping
@@ -58,6 +69,7 @@ public class ProductController {
         return productService.searchProducts(brand, category, active, inStock, minPrice, maxPrice,pageable);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("/{id}/stock/increase")
     public void increaseStock(
             @Valid
@@ -67,6 +79,7 @@ public class ProductController {
         productService.increaseProductStock(id, req.quantity());
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PatchMapping("/{id}/stock/decrease")
     public void decreaseStock(
             @Valid
