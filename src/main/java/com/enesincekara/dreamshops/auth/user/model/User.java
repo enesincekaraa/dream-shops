@@ -5,6 +5,9 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -34,5 +37,11 @@ public class User {
         this.password = password;
         this.role = role;
         this.active = true;
+    }
+
+    public List<String> getRoles() {
+        List<String> roles = new ArrayList<>();
+        roles.add(role.name());
+        return roles;
     }
 }
