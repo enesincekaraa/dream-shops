@@ -1,4 +1,4 @@
-package com.enesincekara.dreamshops.auth.response;
+package com.enesincekara.dreamshops.security.auth.response;
 
 public record TokenResponse(
         String accessToken,

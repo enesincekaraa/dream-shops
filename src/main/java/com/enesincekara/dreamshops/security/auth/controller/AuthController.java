@@ -1,18 +1,17 @@
-package com.enesincekara.dreamshops.auth.controller;
+package com.enesincekara.dreamshops.security.auth.controller;
 
 
-import com.enesincekara.dreamshops.auth.request.LoginRequest;
-import com.enesincekara.dreamshops.auth.request.LogoutRequest;
-import com.enesincekara.dreamshops.auth.request.RefreshRequest;
-import com.enesincekara.dreamshops.auth.request.RegisterRequest;
-import com.enesincekara.dreamshops.auth.response.TokenResponse;
-import com.enesincekara.dreamshops.auth.service.JwtTokenService;
-import com.enesincekara.dreamshops.auth.user.model.RefreshToken;
-import com.enesincekara.dreamshops.auth.user.model.Role;
-import com.enesincekara.dreamshops.auth.user.model.User;
-import com.enesincekara.dreamshops.auth.user.repository.UserRepository;
-import com.enesincekara.dreamshops.auth.user.service.RefreshTokenService;
-import com.enesincekara.dreamshops.config.PasswordConfig;
+import com.enesincekara.dreamshops.security.auth.request.LoginRequest;
+import com.enesincekara.dreamshops.security.auth.request.LogoutRequest;
+import com.enesincekara.dreamshops.security.auth.request.RefreshRequest;
+import com.enesincekara.dreamshops.security.auth.request.RegisterRequest;
+import com.enesincekara.dreamshops.security.auth.response.TokenResponse;
+import com.enesincekara.dreamshops.security.auth.service.JwtTokenService;
+import com.enesincekara.dreamshops.security.auth.user.model.RefreshToken;
+import com.enesincekara.dreamshops.security.auth.user.model.Role;
+import com.enesincekara.dreamshops.security.auth.user.model.User;
+import com.enesincekara.dreamshops.security.auth.user.repository.UserRepository;
+import com.enesincekara.dreamshops.security.auth.user.service.RefreshTokenService;
 import com.enesincekara.dreamshops.exception.PasswordNotMatchedException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

@@ -1,4 +1,4 @@
-package com.enesincekara.dreamshops.auth.user.model;
+package com.enesincekara.dreamshops.security.auth.user.model;
 
 import jakarta.persistence.*;
 

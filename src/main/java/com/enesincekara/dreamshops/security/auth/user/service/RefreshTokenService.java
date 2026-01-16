@@ -1,9 +1,9 @@
-package com.enesincekara.dreamshops.auth.user.service;
+package com.enesincekara.dreamshops.security.auth.user.service;
 
-import com.enesincekara.dreamshops.auth.user.model.RefreshToken;
-import com.enesincekara.dreamshops.auth.user.model.User;
-import com.enesincekara.dreamshops.auth.user.repository.RefreshTokenRepository;
-import com.enesincekara.dreamshops.auth.user.repository.UserRepository;
+import com.enesincekara.dreamshops.security.auth.user.model.RefreshToken;
+import com.enesincekara.dreamshops.security.auth.user.model.User;
+import com.enesincekara.dreamshops.security.auth.user.repository.RefreshTokenRepository;
+import com.enesincekara.dreamshops.security.auth.user.repository.UserRepository;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
