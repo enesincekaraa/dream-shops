@@ -1,4 +1,4 @@
-package com.enesincekara.dreamshops.auth.service;
+package com.enesincekara.dreamshops.security.auth.service;
 
 import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.JWKSet;

@@ -1,4 +1,4 @@
-package com.enesincekara.dreamshops.auth.request;
+package com.enesincekara.dreamshops.security.auth.request;
 
 public record LogoutRequest(
         String refreshToken

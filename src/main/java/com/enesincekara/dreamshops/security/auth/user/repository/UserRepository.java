@@ -1,6 +1,6 @@
-package com.enesincekara.dreamshops.auth.user.repository;
+package com.enesincekara.dreamshops.security.auth.user.repository;
 
-import com.enesincekara.dreamshops.auth.user.model.User;
+import com.enesincekara.dreamshops.security.auth.user.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
